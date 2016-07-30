@@ -1,0 +1,676 @@
+resources:
+  - name: base_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: base_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: latest
+
+  - name: microbase_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: microbase_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: latest
+
+  - name: nexec_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: nexec_img
+    type: image
+    integration: aws
+    pointer:
+      sourceName: "374168611083.dkr.ecr.us-east-1.amazonaws.com/nexec"
+    seed:
+      versionName: latest
+
+  - name: cexec_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: cexec_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: latest
+
+  - name: node_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: latest
+
+  - name: node_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  ###############################
+  # begin Shippable Server resources
+  ###############################
+  - name: shipbits_ecr_cli
+    type: cliConfig
+    integration: "aws"
+    pointer:
+      region: "us-east-1"
+
+  - name: ship_dh_cli
+    type: cliConfig
+    integration: "docker"
+
+  - name: config_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: api_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: api_img
+    type: image
+    integration: aws
+    pointer:
+      sourceName: "374168611083.dkr.ecr.us-east-1.amazonaws.com/api"
+    seed:
+      versionName: latest
+
+  - name: www_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: www_img
+    type: image
+    integration: aws
+    pointer:
+      sourceName: "374168611083.dkr.ecr.us-east-1.amazonaws.com/www"
+    seed:
+      versionName: latest
+
+  - name: micro_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: micro_img
+    type: image
+    integration: aws
+    pointer:
+      sourceName: "374168611083.dkr.ecr.us-east-1.amazonaws.com/micro"
+    seed:
+      versionName: latest
+
+  - name: genexec_img
+    type: image
+    integration: aws
+    pointer:
+      sourceName: "374168611083.dkr.ecr.us-east-1.amazonaws.com/genexec"
+    seed:
+      versionName: latest
+
+  - name: mktg_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: mktg_img
+    type: image
+    integration: aws
+    pointer:
+      sourceName: "374168611083.dkr.ecr.us-east-1.amazonaws.com/mktg"
+    seed:
+      versionName: latest
+
+  - name: ship_ver
+    type: version
+    seed:
+      versionName: "5.3.1"
+
+  ###############################
+  # end Shippable Server resources
+  ###############################
+
+  ###############################
+  # begin alpha rc infra
+  ###############################
+
+# REPO of AWS Infra provisioning
+  - name: infra_repo
+    type: gitRepo
+    integration: "git"
+    pointer:
+      sourceName: "Shippable/infra"
+      branch: master
+
+# PEM key for AWS RC account
+  - name: aws_rc_pem
+    type: integration
+    integration: pem
+
+# CREDS for AWS RC account
+  - name: aws_rc_access
+    type: integration
+    integration: aws
+
+  ###############################
+  # end alpha rc infra
+  ###############################
+
+
+  ###############################
+  # begin prod infra resources
+  ###############################
+
+# CREDS for AWS PROD account
+  - name: aws_prod_access
+    type: integration
+    integration: aws
+
+# PEM key for AWS PROD account
+  - name: aws_prod_pem
+    type: integration
+    integration: pem
+  ###############################
+  # end alpha rc infra
+  ###############################
+
+
+  ###############################
+  # begin RC resources
+  ###############################
+
+# Swarm node info for alpha
+  - name: aws_rc_swarm
+    type: params
+    version:
+      params:
+        secure: i12Qc6wli31gqzWEYoWy09i9vmS0rbBNfvzU6X0qlChxEUvs4Cqde0BYbJZwwTAVbMZ/NOPd4E2PojVPC1WWx5Y2zW5YMY20aboIZ2O0f34AQyKe9YXZbwkGGGG7TddG7qafnKAFpwRkfCXysnTA/B1jh0QunQkojCu8zyTny3i84q/KvOTzLG5lS50fvHLdtCoVW1RGuXxZg6RBmtERHu1FhcaBmD1HadNKSV3NHQentnXwRk/xo2SVdQzLPDfKmu1/tmSGhr7beE06LSBJtJ9ttkq3hbKidmuU8rsa8RXRrvCm2KFuD/qFu1RQYl0vB88eDp69GQifkehBgXCtXA==
+
+  ###############################
+  # end RC resources
+  ###############################
+
+  ###############################
+  # BEGIN BVT resources
+  ###############################
+  - name: bat_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: bvt_params
+    type: params
+    version:
+      params:
+        #API_TOKEN API_URL
+        secure: ZvT52e1ppkhFyJxZIXUXpF3dufd+PCIh+s527y6Tdetob7YWzS93pIdnpmrz+xL219ur8mu+OkOYZNTGhsMEMQJJJzUJC1nh2LeqHJF+gNSC1KUz3xD68SOw5kT5v7TiE7JYVA/8mIqrJFHVI7GhEq/YObkaZTmyFw6O4pikDSEqZMRnDlv0l2ou0xZw+YXHMHD8kiGOvZjK5rJ1xqPmmnCetxOm5/7g+d24x2797z2d8oS9yDSwG5KWdIZOh9tpI7EKKrMOsES6rBoUfYtFVOWReDzWKGK38tqFFK6gEuJzI6wMfUfy+GTpY+GFPjTfI+tJJfbKB69Ftk5+Pb777w7bwj8yweyFn5/V/GL1sTsI3X6zgHh1bmSHF5P5fwJDO7feX8Y5qVGcC5QDjbCzs3KTMAz2igLphGh4XdGLSqAJq7ooCTQ5BpMFWE3yWybGcnNXPe69BcuSUmHcvdBW7fCboNwgWOQxChKsa0V3dwJksn9Ehm/KUDCkORUdrCsZL751Hxb9OzPsPZUu/SRUmZWQ4jBosXU7Pkf77rwbES40USTFeqqzLXO+EhoSLAn/ozNcdfJ30IXnP/pu42CkXHqHGvQILRw+NE0PQ2PnYB239BTo0/Wg03ytLXYz3P2jbEAGJVrC8bDSBGeW1JQmLWaW6RzDvA4yymkGuxS1jQM=
+
+  ###############################
+  # END BVT resources
+  ###############################
+
+  ###############################
+  # BEGIN AMI Build resources
+  ###############################
+  - name: bldami_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: harryi3t/5134
+      branch: master
+
+  - name: aws_bits_access
+    type: integration
+    integration: aws
+
+  - name: baseami_params
+    type: params
+    version:
+      params:
+        SOURCE_AMI: "ami-5ac2cd4d"
+        VPC_ID: "vpc-266f3241"
+        SUBNET_ID: "subnet-6df12f24"
+        SECURITY_GROUP_ID: "sg-f634518c"
+        REGION: "us-east-1"
+
+  ###############################
+  # END AMI Build resources
+  ###############################
+
+  ###############################
+  # BEGIN notification resources
+  ###############################
+
+  - name: slack_rc
+    type: notification
+    integration: slack
+    pointer:
+      recipients:
+        - "#rc"
+  ###############################
+  # END notification resources
+  ###############################
+
+
+  ###############################
+  # BEGIN drydock resources
+  ###############################
+  - name: u14_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14
+      branch: master
+      buildOnTagPush: true
+
+  - name: u14_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u14all_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14all
+      branch: master
+      buildOnTagPush: true
+
+  - name: u14all_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u14nodall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14nodall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u14nodall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u14pytall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14pytall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u14pytall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u14cloall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14cloall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u14cloall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u14golall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14golall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u14golall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u14javall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14javall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u14javall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u14scaall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14scaall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u14scaall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u14ruball_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14ruball
+      branch: master
+      buildOnTagPush: true
+
+  - name: u14ruball_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u14phpall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14phpall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u14phpall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u14cppall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u14cppall
+      branch: master
+
+  - name: u14cppall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16
+      branch: master
+      buildOnTagPush: true
+
+  - name: u16_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16all_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16all
+      branch: master
+      buildOnTagPush: true
+
+  - name: u16all_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16nodall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16nodall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u16nodall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16pytall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16pytall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u16pytall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16cloall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16cloall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u16cloall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16golall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16golall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u16golall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16javall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16javall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u16javall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16scaall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16scaall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u16scaall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16ruball_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16ruball
+      branch: master
+      buildOnTagPush: true
+
+  - name: u16ruball_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16phpall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16phpall
+      branch: master
+      buildOnTagPush: true
+
+  - name: u16phpall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  - name: u16cppall_repo
+    type: gitRepo
+    integration: git
+    pointer:
+      sourceName: dry-dock/u16cppall
+      branch: master
+
+  - name: u16cppall_img
+    type: image
+    integration: docker
+    pointer:
+      sourceName: "harryi3t/busybox"
+    seed:
+      versionName: tip
+
+  ###############################
+  # END drydock resources
+  ###############################
+
+  ###############################
+  # Begin SSH Key to GH
+  ###############################
+
+  # CREDS for GH access for Shippable
+  - name: avi_gh_ssh
+    type: integration
+    integration: ssh
+
+  ###############################
+  # End SSH Key to GH
+  ###############################
+
+  - name: team_params
+    type: params
+    version:
+      params:
+        TEAM_ID: 523906
+        TEAM_NAME: "pushPull"
+        ORG_NAME: "shippable"
+        GITHUB_API_URL: 'https://api.github.com'
+        secure: x5wKdu6PFyLZAGowQQ2bs/p8VDzBJfOoe0JVKDK51GVfNlMCuZX3jY0bxlkj+im3Vl3xSGdUK0I2R+SzmbGiazPizjGC98MhR6T4XnhKGIMAqOzwHjyd2eRmyksZOCFQ1KkrXLGJ4jMkaOEnzgjWP98ZC9VHyd/QmbP9d74w+QY3EtMw0jzCN+7t/Y0JVP/SOj7NRjNdhcuXVA7YsSYur4aILJ+bpBLgRGe/AJiUaBEi9Xw9xrmOh+M1tv5qmzTkNE65KJfdRsljCvVT0ZPfVQFzdHAlmL3ffqYmaS2qwi9go7HbDLIvwuKve2cK36arhiHgrE8VSQa5I0L7J2gs3g==

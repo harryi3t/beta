@@ -1,0 +1,1591 @@
+jobs:
+  - name: build_microbase
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: microbase_repo
+      - IN: u14_img
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh microbase drydock
+      - OUT: microbase_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_cexec
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: cexec_repo
+      - IN: microbase_img
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh cexec drydock
+      - OUT: cexec_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_node
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: node_repo
+      - IN: microbase_img
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh node drydock
+      - OUT: node_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_base
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: base_repo
+      - IN: microbase_img
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh base drydock
+      - OUT: base_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_nexec
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: nexec_repo
+      - IN: microbase_img
+      - IN: shipbits_ecr_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh nexec 374168611083.dkr.ecr.us-east-1.amazonaws.com
+      - OUT: nexec_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_mktg
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: mktg_repo
+      - IN: microbase_img
+      - IN: shipbits_ecr_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh mktg 374168611083.dkr.ecr.us-east-1.amazonaws.com
+      - OUT: mktg_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  ##########################
+  # begin Shippable Server jobs
+  ##########################
+  - name: build_micro
+    type: runCLI
+    steps:
+      - IN: micro_repo
+      - IN: microbase_img
+      - IN: shipbits_ecr_cli
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/micro_repo/gitRepo/build.sh
+      - OUT: micro_img
+      - OUT: genexec_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_api
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: api_repo
+      - IN: node_repo
+      - IN: microbase_img
+      - IN: shipbits_ecr_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh api 374168611083.dkr.ecr.us-east-1.amazonaws.com
+      - OUT: api_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_www
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: www_repo
+      - IN: microbase_img
+      - IN: shipbits_ecr_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh www 374168611083.dkr.ecr.us-east-1.amazonaws.com
+      - OUT: www_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+#  ###########################################
+#  # deploy rc release to rc environment
+#  ###########################################
+  - name: deploy_rc
+    type: runSh
+    on_start:
+      - NOTIFY: slack_rc
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: base_repo
+      - IN: patch_baseami
+      - IN: aws_rc_pem
+      - IN: aws_rc_swarm
+      - IN: api_img
+      - IN: www_img
+      - IN: nexec_img
+      - IN: genexec_img
+      - IN: mktg_img
+      - IN: micro_img
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/deployRc.sh
+    on_success:
+      - script: echo 'succeeded'
+      - NOTIFY: slack_rc
+    on_failure:
+      - script: echo 'failed'
+      - NOTIFY: slack_rc
+
+  ###########################################
+  # release production from default manifest
+  ###########################################
+
+  - name: rel_prod
+    type: release
+    steps:
+      - IN: ship_ver
+        switch: off
+      - IN: bvt
+        switch: off
+      - TASK: managed
+        bump: patch
+
+  ###########################################
+  # BEGIN run infra provisioning
+  ###########################################
+
+  - name: rc_saas_infra_prov
+    type: runSh
+    steps:
+      - IN: aws_rc_pem
+      - IN: aws_rc_access
+      - IN: infra_repo
+        switch: off
+      - TASK:
+        - script: IN/infra_repo/gitRepo/provision.sh rc saas
+    on_success:
+      - script: echo 'SUCCESS!'
+    on_failure:
+      - script: echo 'FAILURE!'
+    always:
+      - script: /build/IN/infra_repo/gitRepo/archiveProvisionState.sh rc saas
+
+  - name: prod_saas_infra_prov
+    type: runSh
+    steps:
+      - IN: aws_prod_pem
+      - IN: aws_prod_access
+      - IN: infra_repo
+        switch: off
+      - TASK:
+        - script: IN/infra_repo/gitRepo/provision.sh prod saas
+    on_success:
+      - script: echo 'SUCCESS!'
+    on_failure:
+      - script: echo 'FAILURE!'
+    always:
+      - script: /build/IN/infra_repo/gitRepo/archiveProvisionState.sh prod saas
+
+  ###########################################
+  # BEGIN run infra provisioning
+  ###########################################
+
+  ###########################################
+  # BEGIN Build Acceptance Tests
+  ###########################################
+
+  - name: bvt
+    type: runSh
+    steps:
+      - IN: bat_repo
+      - IN: bvt_params
+      - IN: deploy_rc
+      - TASK:
+        - script: IN/bat_repo/gitRepo/test.sh bvt_params
+    on_success:
+      - script: echo 'succeeded'
+    on_failure:
+      - script: echo 'failed'
+
+  ###########################################
+  # END Build Acceptance Tests
+  ###########################################
+
+  ###########################################
+  # START Build AMI
+  ###########################################
+  - name: build_baseami
+    type: runSh
+    steps:
+      - IN: u16cppall_img
+        switch: off
+      - IN: u16phpall_img
+        switch: off
+      - IN: u16ruball_img
+        switch: off
+      - IN: u16scaall_img
+        switch: off
+      - IN: u16javall_img
+        switch: off
+      - IN: u16golall_img
+        switch: off
+      - IN: u16cloall_img
+        switch: off
+      - IN: u16pytall_img
+        switch: off
+      - IN: u16nodall_img
+        switch: off
+      - IN: u16all_img
+        switch: off
+      - IN: u16_img
+        switch: off
+      - IN: u14_img
+        switch: off
+      - IN: u14all_img
+        switch: off
+      - IN: u14nodall_img
+        switch: off
+      - IN: u14pytall_img
+        switch: off
+      - IN: u14cloall_img
+        switch: off
+      - IN: u14golall_img
+        switch: off
+      - IN: u14javall_img
+        switch: off
+      - IN: u14scaall_img
+        switch: off
+      - IN: u14ruball_img
+        switch: off
+      - IN: u14phpall_img
+        switch: off
+      - IN: u14cppall_img
+        switch: off
+      - IN: baseami_params
+      - IN: aws_bits_access
+      - IN: node_repo
+        switch: off
+      - IN: bldami_repo
+        switch: off
+      - TASK:
+        - script: IN/bldami_repo/gitRepo/base/basePack.sh
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: cat IN/bldami_repo/gitRepo/base/output.txt
+
+  - name: patch_baseami
+    type: runSh
+    steps:
+      - IN: cexec_repo
+      - IN: node_repo
+        switch: off
+      - IN: baseami_params
+      - IN: aws_bits_access
+      - IN: build_baseami
+      - IN: bldami_repo
+        switch: off
+      - TASK:
+        - script: IN/bldami_repo/gitRepo/basePatch/basePatchPack.sh
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: cat IN/bldami_repo/gitRepo/basePatch/output.txt
+
+  - name: build_rcami_tmp
+    type: runSh
+    steps:
+      - IN: baseami_params
+      - IN: aws_bits_access
+      - IN: bldami_repo
+        switch: off
+      - IN: u14_img
+        switch: off
+      - TASK:
+        - script: IN/bldami_repo/gitRepo/exec/execPackTmp.sh build_rcami_tmp u14_img ami-4ae41a5c rc-stable
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+
+  - name: build_rcami_tmp_unst
+    type: runSh
+    steps:
+      - IN: baseami_params
+      - IN: aws_bits_access
+      - IN: bldami_repo
+        switch: off
+      - IN: u14_img
+        switch: off
+      - TASK:
+        - script: IN/bldami_repo/gitRepo/exec/execPackTmp.sh build_rcami_tmp_unst u14_img ami-90fd0286 rc-unstable
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+
+  - name: build_finalami
+    type: runSh
+    steps:
+      - IN: tag_push_u16cppall
+        switch: off
+      - IN: tag_push_u16phpall
+        switch: off
+      - IN: tag_push_u16ruball
+        switch: off
+      - IN: tag_push_u16scaall
+        switch: off
+      - IN: tag_push_u16javall
+        switch: off
+      - IN: tag_push_u16golall
+        switch: off
+      - IN: tag_push_u16cloall
+        switch: off
+      - IN: tag_push_u16pytall
+        switch: off
+      - IN: tag_push_u16nodall
+        switch: off
+      - IN: tag_push_u16all
+        switch: off
+      - IN: tag_push_u16
+        switch: off
+      - IN: tag_push_u14cppall
+        switch: off
+      - IN: tag_push_u14phpall
+        switch: off
+      - IN: tag_push_u14ruball
+        switch: off
+      - IN: tag_push_u14scaall
+        switch: off
+      - IN: tag_push_u14javall
+        switch: off
+      - IN: tag_push_u14golall
+        switch: off
+      - IN: tag_push_u14cloall
+        switch: off
+      - IN: tag_push_u14pytall
+        switch: off
+      - IN: tag_push_u14nodall
+        switch: off
+      - IN: tag_push_u14all
+        switch: off
+      - IN: tag_push_u14
+        switch: off
+      - IN: tag_push_www
+        switch: off
+      - IN: tag_push_img_genexec
+        switch: off
+      - IN: tag_push_api
+        switch: off
+      - IN: tag_push_micro
+        switch: off
+      - IN: tag_push_microbase
+        switch: off
+      - IN: tag_push_cexec
+        switch: off
+      - IN: tag_push_node
+        switch: off
+      - IN: tag_push_nexec
+        switch: off
+      - IN: baseami_params
+      - IN: aws_bits_access
+      - IN: bldami_repo
+        switch: off
+      - IN: patch_baseami
+        switch: off
+      - IN: rel_prod
+        switch: off
+      - TASK:
+        - script: IN/bldami_repo/gitRepo/exec/execPack.sh
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+
+  - name: build_finalami_tmp_v532
+    type: runSh
+    steps:
+      - IN: baseami_params
+      - IN: aws_bits_access
+      - IN: tag_push_img_genexec
+        switch: off
+      - IN: tag_push_cexec
+        switch: off
+      - IN: tag_push_node
+        switch: off
+      - IN: bldami_repo
+        switch: off
+      - IN: rel_prod
+        switch: off
+      - TASK:
+        - script: IN/bldami_repo/gitRepo/exec/execPackTmp.sh build_finalami_tmp_v532 rel_prod ami-3f882529 v532
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+
+  - name: build_finalami_tmp
+    type: runSh
+    steps:
+      - IN: baseami_params
+      - IN: aws_bits_access
+      - IN: tag_push_img_genexec
+        switch: off
+      - IN: tag_push_cexec
+        switch: off
+      - IN: tag_push_node
+        switch: off
+      - IN: bldami_repo
+        switch: off
+      - IN: rel_prod
+        switch: off
+      - TASK:
+        - script: IN/bldami_repo/gitRepo/exec/execPackTmp.sh build_finalami_tmp rel_prod ami-4ae41a5c stable
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+
+  - name: build_finalami_tmp_unst
+    type: runSh
+    steps:
+      - IN: baseami_params
+      - IN: aws_bits_access
+      - IN: tag_push_img_genexec
+        switch: off
+      - IN: tag_push_cexec
+        switch: off
+      - IN: tag_push_node
+        switch: off
+      - IN: bldami_repo
+        switch: off
+      - IN: rel_prod
+        switch: off
+      - TASK:
+        - script: IN/bldami_repo/gitRepo/exec/execPackTmp.sh build_finalami_tmp_unst rel_prod ami-90fd0286 unstable
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+  ###########################################
+  # END Build AMI
+  ###########################################
+
+
+  ###########################################
+  # START Drydock image builds
+  ###########################################
+
+  - name: build_u14
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14 drydock
+      - OUT: u14_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u14all
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14_img
+      - IN: u14all_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14all drydock
+      - OUT: u14all_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u14nodall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14all_img
+      - IN: u14nodall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14nodall drydock
+      - OUT: u14nodall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u14pytall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14all_img
+      - IN: u14pytall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14pytall drydock
+      - OUT: u14pytall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u14cloall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14all_img
+      - IN: u14cloall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14cloall drydock
+      - OUT: u14cloall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u14golall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14all_img
+      - IN: u14golall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14golall drydock
+      - OUT: u14golall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u14javall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14all_img
+      - IN: u14javall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14javall drydock
+      - OUT: u14javall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u14scaall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14javall_img
+      - IN: u14scaall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14scaall drydock
+      - OUT: u14scaall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u14ruball
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14all_img
+      - IN: u14ruball_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14ruball drydock
+      - OUT: u14ruball_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u14phpall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14all_img
+      - IN: u14phpall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14phpall drydock
+      - OUT: u14phpall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u14cppall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u14all_img
+      - IN: u14cppall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u14cppall drydock
+      - OUT: u14cppall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16 drydock
+      - OUT: u16_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16all
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16_img
+      - IN: u16all_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16all drydock
+      - OUT: u16all_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16nodall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16all_img
+      - IN: u16nodall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16nodall drydock
+      - OUT: u16nodall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16pytall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16all_img
+      - IN: u16pytall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16pytall drydock
+      - OUT: u16pytall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16cloall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16all_img
+      - IN: u16cloall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16cloall drydock
+      - OUT: u16cloall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16golall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16all_img
+      - IN: u16golall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16golall drydock
+      - OUT: u16golall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16javall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16all_img
+      - IN: u16javall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16javall drydock
+      - OUT: u16javall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16scaall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16javall_img
+      - IN: u16scaall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16scaall drydock
+      - OUT: u16scaall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16ruball
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16all_img
+      - IN: u16ruball_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16ruball drydock
+      - OUT: u16ruball_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16phpall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16all_img
+      - IN: u16phpall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16phpall drydock
+      - OUT: u16phpall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: build_u16cppall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: u16all_img
+      - IN: u16cppall_repo
+      - IN: ship_dh_cli
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/buildImage.sh u16cppall drydock
+      - OUT: u16cppall_img
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  ###########################################
+  # END Drydock image builds
+  ###########################################
+
+  ###########################################
+  # START TAG & PUSH image/repos/amis
+  ###########################################
+
+  - name: tag_push_www
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: www_img
+        switch: off
+      - IN: www_repo
+        switch: off
+      - IN: shipbits_ecr_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh www 374168611083.dkr.ecr.us-east-1.amazonaws.com Shippable
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_api
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: api_img
+        switch: off
+      - IN: api_repo
+        switch: off
+      - IN: shipbits_ecr_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh api 374168611083.dkr.ecr.us-east-1.amazonaws.com Shippable
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_nexec
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: nexec_img
+        switch: off
+      - IN: nexec_repo
+        switch: off
+      - IN: shipbits_ecr_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh nexec 374168611083.dkr.ecr.us-east-1.amazonaws.com Shippable
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_micro
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: micro_img
+        switch: off
+      - IN: micro_repo
+        switch: off
+      - IN: shipbits_ecr_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh micro 374168611083.dkr.ecr.us-east-1.amazonaws.com Shippable
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_img_genexec
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: genexec_img
+        switch: off
+      - IN: shipbits_ecr_cli
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImage.sh genexec 374168611083.dkr.ecr.us-east-1.amazonaws.com
+        - script: ./IN/config_repo/gitRepo/tagAndPushImage.sh genexec shipimg
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_microbase
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: microbase_img
+        switch: off
+      - IN: microbase_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh microbase drydock Shippable
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_cexec
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: cexec_img
+        switch: off
+      - IN: cexec_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh cexec drydock Shippable
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_mktg
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: mktg_img
+        switch: off
+      - IN: mktg_repo
+        switch: off
+      - IN: shipbits_ecr_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh mktg 374168611083.dkr.ecr.us-east-1.amazonaws.com Shippable
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_node
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: node_repo
+        switch: off
+      - IN: node_img
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushRepo.sh node Shippable
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_base
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: base_repo
+        switch: off
+      - IN: base_img
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushBaseRepo.sh
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  ### Taggin u14 images
+  - name: tag_push_u14
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14_img
+        switch: off
+      - IN: u14_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14 drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u14all
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14all_img
+        switch: off
+      - IN: u14all_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14all drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u14nodall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14nodall_img
+        switch: off
+      - IN: u14nodall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14nodall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u14pytall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14pytall_img
+        switch: off
+      - IN: u14pytall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14pytall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u14cloall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14cloall_img
+        switch: off
+      - IN: u14cloall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14cloall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u14golall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14golall_img
+        switch: off
+      - IN: u14golall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14golall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u14javall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14javall_img
+        switch: off
+      - IN: u14javall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14javall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u14scaall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14scaall_img
+        switch: off
+      - IN: u14scaall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14scaall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u14ruball
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14ruball_img
+        switch: off
+      - IN: u14ruball_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14ruball drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u14phpall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14phpall_img
+        switch: off
+      - IN: u14phpall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14phpall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u14cppall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u14cppall_img
+        switch: off
+      - IN: u14cppall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14cppall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  ### Taggin u16 images
+  - name: tag_push_u16
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16_img
+        switch: off
+      - IN: u16_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16 drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u16all
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16all_img
+        switch: off
+      - IN: u16all_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16all drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u16nodall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16nodall_img
+        switch: off
+      - IN: u16nodall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16nodall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u16pytall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16pytall_img
+        switch: off
+      - IN: u16pytall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16pytall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u16cloall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16cloall_img
+        switch: off
+      - IN: u16cloall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16cloall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u16golall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16golall_img
+        switch: off
+      - IN: u16golall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16golall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u16javall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16javall_img
+        switch: off
+      - IN: u16javall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16javall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u16scaall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16scaall_img
+        switch: off
+      - IN: u16scaall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16scaall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u16ruball
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16ruball_img
+        switch: off
+      - IN: u16ruball_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16ruball drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u16phpall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16phpall_img
+        switch: off
+      - IN: u16phpall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16phpall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: tag_push_u16cppall
+    type: runCLI
+    steps:
+      - IN: config_repo
+        switch: off
+      - IN: avi_gh_ssh
+        switch: off
+      - IN: u16cppall_img
+        switch: off
+      - IN: u16cppall_repo
+        switch: off
+      - IN: ship_dh_cli
+        switch: off
+      - IN: rel_prod
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16cppall drydock dry-dock
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  ###########################################
+  # END TAG & PUSH image/repos/amis
+  ###########################################
+
+  ##########################
+  # begin LOCK UNLOCK JOBS
+  ##########################
+
+  - name: lock_team
+    type: runCLI
+    steps:
+      - IN: api_repo
+      - IN: www_repo
+      - IN: micro_repo
+      - IN: nexec_repo
+      - IN: cexec_repo
+      - IN: mktg_repo
+      - IN: build_microbase
+      - IN: team_params
+      - IN: config_repo
+        switch: off
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/lockUnlockTeams.sh pull
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  - name: unlock_team
+    type: runCLI
+    steps:
+      - IN: bvt
+      - IN: team_params
+      - IN: config_repo
+        switch: off
+      - TASK:
+        - script: ./IN/config_repo/gitRepo/lockUnlockTeams.sh push
+    on_success:
+      - script: echo 'on success !!!!!'
+    on_failure:
+      - script: echo 'Failed job .... :('
+
+  ##########################
+  # begin LOCK UNLOCK JOBS
+  ##########################
+
