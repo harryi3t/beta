@@ -3,7 +3,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-1
       branch: master
 
   - name: base_img
@@ -18,7 +18,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-1
       branch: master
 
   - name: microbase_img
@@ -33,7 +33,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-1
       branch: master
 
   - name: nexec_img
@@ -48,7 +48,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-2
       branch: master
 
   - name: cexec_img
@@ -71,7 +71,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-2
       branch: master
 
   ###############################
@@ -91,14 +91,14 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-2
       branch: master
 
   - name: api_repo
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-3
       branch: master
 
   - name: api_img
@@ -113,7 +113,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-3
       branch: master
 
   - name: www_img
@@ -128,7 +128,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-3
       branch: master
 
   - name: micro_img
@@ -151,7 +151,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-4
       branch: master
 
   - name: mktg_img
@@ -238,7 +238,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-4
       branch: master
 
   - name: bvt_params
@@ -259,7 +259,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: harryi3t/5134
+      sourceName: harryi3t/test-4
       branch: master
 
   - name: aws_bits_access
