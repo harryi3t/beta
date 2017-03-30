@@ -8,12 +8,12 @@ jobs:
       - IN: u14_img
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh microbase drydock
+        - script: echo "running build_microbase"
       - OUT: microbase_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_cexec
     type: runCLI
@@ -24,12 +24,12 @@ jobs:
       - IN: microbase_img
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh cexec drydock
+        - script: echo "running "
       - OUT: cexec_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_node
     type: runCLI
@@ -40,12 +40,12 @@ jobs:
       - IN: microbase_img
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh node drydock
+        - script: echo "running "
       - OUT: node_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_base
     type: runCLI
@@ -56,12 +56,12 @@ jobs:
       - IN: microbase_img
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh base drydock
+        - script: echo "running "
       - OUT: base_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_nexec
     type: runCLI
@@ -72,12 +72,12 @@ jobs:
       - IN: microbase_img
       - IN: shipbits_ecr_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh nexec 374168611083.dkr.ecr.us-east-1.amazonaws.com
+        - script: echo "running "
       - OUT: nexec_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_mktg
     type: runCLI
@@ -88,12 +88,12 @@ jobs:
       - IN: microbase_img
       - IN: shipbits_ecr_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh mktg 374168611083.dkr.ecr.us-east-1.amazonaws.com
+        - script: echo "running "
       - OUT: mktg_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   ##########################
   # begin Shippable Server jobs
@@ -106,13 +106,13 @@ jobs:
       - IN: shipbits_ecr_cli
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/micro_repo/gitRepo/build.sh
+        - script: echo "running "
       - OUT: micro_img
       - OUT: genexec_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_api
     type: runCLI
@@ -124,12 +124,12 @@ jobs:
       - IN: microbase_img
       - IN: shipbits_ecr_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh api 374168611083.dkr.ecr.us-east-1.amazonaws.com
+        - script: echo "running "
       - OUT: api_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_www
     type: runCLI
@@ -140,12 +140,12 @@ jobs:
       - IN: microbase_img
       - IN: shipbits_ecr_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh www 374168611083.dkr.ecr.us-east-1.amazonaws.com
+        - script: echo "running "
       - OUT: www_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
 #  ###########################################
 #  # deploy rc release to rc environment
@@ -168,12 +168,12 @@ jobs:
       - IN: mktg_img
       - IN: micro_img
       - TASK:
-        - script: ./IN/config_repo/gitRepo/deployRc.sh
+        - script: echo "running deploy_rc"
     on_success:
-      - script: echo 'succeeded'
+      - script: echo "successfully ran"
       - NOTIFY: slack_rc
     on_failure:
-      - script: echo 'failed'
+      - script: echo "failure while running"
       - NOTIFY: slack_rc
 
   ###########################################
@@ -202,13 +202,13 @@ jobs:
       - IN: infra_repo
         switch: off
       - TASK:
-        - script: IN/infra_repo/gitRepo/provision.sh rc saas
+        - script: echo "running "
     on_success:
-      - script: echo 'SUCCESS!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'FAILURE!'
+      - script: echo "failure while running"
     always:
-      - script: /build/IN/infra_repo/gitRepo/archiveProvisionState.sh rc saas
+      - script: echo "running "
 
   - name: prod_saas_infra_prov
     type: runSh
@@ -218,13 +218,13 @@ jobs:
       - IN: infra_repo
         switch: off
       - TASK:
-        - script: IN/infra_repo/gitRepo/provision.sh prod saas
+        - script: echo "running "
     on_success:
-      - script: echo 'SUCCESS!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'FAILURE!'
+      - script: echo "failure while running"
     always:
-      - script: /build/IN/infra_repo/gitRepo/archiveProvisionState.sh prod saas
+      - script: echo "running "
 
   ###########################################
   # BEGIN run infra provisioning
@@ -243,9 +243,9 @@ jobs:
       - TASK:
         - "BVT passes"
     on_success:
-      - script: echo 'succeeded'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'failed'
+      - script: echo "failure while running"
 
   ###########################################
   # END Build Acceptance Tests
@@ -308,11 +308,11 @@ jobs:
       - IN: bldami_repo
         switch: off
       - TASK:
-        - script: IN/bldami_repo/gitRepo/base/basePack.sh
+        - script: echo "running build_baseami"
     on_success:
-      - script: echo "SUCCESS"
+      - script: echo "successfully ran"
     on_failure:
-      - script: cat IN/bldami_repo/gitRepo/base/output.txt
+      - script: echo "failure while running"
 
   - name: patch_baseami
     type: runSh
@@ -326,11 +326,11 @@ jobs:
       - IN: bldami_repo
         switch: off
       - TASK:
-        - script: IN/bldami_repo/gitRepo/basePatch/basePatchPack.sh
+        - script: echo "running patch_baseami"
     on_success:
-      - script: echo "SUCCESS"
+      - script: echo "successfully ran"
     on_failure:
-      - script: cat IN/bldami_repo/gitRepo/basePatch/output.txt
+      - script: echo "failure while running"
 
   - name: build_rcami_tmp
     type: runSh
@@ -342,11 +342,11 @@ jobs:
       - IN: u14_img
         switch: off
       - TASK:
-        - script: IN/bldami_repo/gitRepo/exec/execPackTmp.sh build_rcami_tmp u14_img ami-4ae41a5c rc-stable
+        - script: echo "running "
     on_success:
-      - script: echo "SUCCESS"
+      - script: echo "successfully ran"
     on_failure:
-      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+      - script: echo "failure while running"
 
   - name: build_rcami_tmp_unst
     type: runSh
@@ -358,11 +358,11 @@ jobs:
       - IN: u14_img
         switch: off
       - TASK:
-        - script: IN/bldami_repo/gitRepo/exec/execPackTmp.sh build_rcami_tmp_unst u14_img ami-90fd0286 rc-unstable
+        - script: echo "running "
     on_success:
-      - script: echo "SUCCESS"
+      - script: echo "successfully ran"
     on_failure:
-      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+      - script: echo "failure while running"
 
   - name: build_finalami
     type: runSh
@@ -436,11 +436,11 @@ jobs:
       - IN: rel_prod
         switch: off
       - TASK:
-        - script: IN/bldami_repo/gitRepo/exec/execPack.sh
+        - script: echo "running "
     on_success:
-      - script: echo "SUCCESS"
+      - script: echo "successfully ran"
     on_failure:
-      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+      - script: echo "failure while running"
 
   - name: build_finalami_tmp_v532
     type: runSh
@@ -458,11 +458,11 @@ jobs:
       - IN: rel_prod
         switch: off
       - TASK:
-        - script: IN/bldami_repo/gitRepo/exec/execPackTmp.sh build_finalami_tmp_v532 rel_prod ami-3f882529 v532
+        - script: echo "running "
     on_success:
-      - script: echo "SUCCESS"
+      - script: echo "successfully ran"
     on_failure:
-      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+      - script: echo "failure while running"
 
   - name: build_finalami_tmp
     type: runSh
@@ -480,11 +480,11 @@ jobs:
       - IN: rel_prod
         switch: off
       - TASK:
-        - script: IN/bldami_repo/gitRepo/exec/execPackTmp.sh build_finalami_tmp rel_prod ami-4ae41a5c stable
+        - script: echo "running "
     on_success:
-      - script: echo "SUCCESS"
+      - script: echo "successfully ran"
     on_failure:
-      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+      - script: echo "failure while running"
 
   - name: build_finalami_tmp_unst
     type: runSh
@@ -502,11 +502,11 @@ jobs:
       - IN: rel_prod
         switch: off
       - TASK:
-        - script: IN/bldami_repo/gitRepo/exec/execPackTmp.sh build_finalami_tmp_unst rel_prod ami-90fd0286 unstable
+        - script: echo "running "
     on_success:
-      - script: echo "SUCCESS"
+      - script: echo "successfully ran"
     on_failure:
-      - script: cat /build/IN/bldami_repo/gitRepo/exec/output.txt
+      - script: echo "failure while running"
   ###########################################
   # END Build AMI
   ###########################################
@@ -524,12 +524,12 @@ jobs:
       - IN: u14_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14 drydock
+        - script: echo "running "
       - OUT: u14_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u14all
     type: runCLI
@@ -540,12 +540,12 @@ jobs:
       - IN: u14all_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14all drydock
+        - script: echo "running "
       - OUT: u14all_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u14nodall
     type: runCLI
@@ -556,12 +556,12 @@ jobs:
       - IN: u14nodall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14nodall drydock
+        - script: echo "running "
       - OUT: u14nodall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u14pytall
     type: runCLI
@@ -572,12 +572,12 @@ jobs:
       - IN: u14pytall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14pytall drydock
+        - script: echo "running "
       - OUT: u14pytall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u14cloall
     type: runCLI
@@ -588,12 +588,12 @@ jobs:
       - IN: u14cloall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14cloall drydock
+        - script: echo "running "
       - OUT: u14cloall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u14golall
     type: runCLI
@@ -604,12 +604,12 @@ jobs:
       - IN: u14golall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14golall drydock
+        - script: echo "running "
       - OUT: u14golall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u14javall
     type: runCLI
@@ -620,12 +620,12 @@ jobs:
       - IN: u14javall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14javall drydock
+        - script: echo "running "
       - OUT: u14javall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u14scaall
     type: runCLI
@@ -636,12 +636,12 @@ jobs:
       - IN: u14scaall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14scaall drydock
+        - script: echo "running "
       - OUT: u14scaall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u14ruball
     type: runCLI
@@ -652,12 +652,12 @@ jobs:
       - IN: u14ruball_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14ruball drydock
+        - script: echo "running "
       - OUT: u14ruball_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u14phpall
     type: runCLI
@@ -668,12 +668,12 @@ jobs:
       - IN: u14phpall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14phpall drydock
+        - script: echo "running "
       - OUT: u14phpall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u14cppall
     type: runCLI
@@ -684,12 +684,12 @@ jobs:
       - IN: u14cppall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u14cppall drydock
+        - script: echo "running "
       - OUT: u14cppall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16
     type: runCLI
@@ -699,12 +699,12 @@ jobs:
       - IN: u16_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16 drydock
+        - script: echo "running "
       - OUT: u16_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16all
     type: runCLI
@@ -715,12 +715,12 @@ jobs:
       - IN: u16all_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16all drydock
+        - script: echo "running "
       - OUT: u16all_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16nodall
     type: runCLI
@@ -731,12 +731,12 @@ jobs:
       - IN: u16nodall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16nodall drydock
+        - script: echo "running "
       - OUT: u16nodall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16pytall
     type: runCLI
@@ -747,12 +747,12 @@ jobs:
       - IN: u16pytall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16pytall drydock
+        - script: echo "running "
       - OUT: u16pytall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16cloall
     type: runCLI
@@ -763,12 +763,12 @@ jobs:
       - IN: u16cloall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16cloall drydock
+        - script: echo "running "
       - OUT: u16cloall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16golall
     type: runCLI
@@ -779,12 +779,12 @@ jobs:
       - IN: u16golall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16golall drydock
+        - script: echo "running "
       - OUT: u16golall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16javall
     type: runCLI
@@ -795,12 +795,12 @@ jobs:
       - IN: u16javall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16javall drydock
+        - script: echo "running "
       - OUT: u16javall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16scaall
     type: runCLI
@@ -811,12 +811,12 @@ jobs:
       - IN: u16scaall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16scaall drydock
+        - script: echo "running "
       - OUT: u16scaall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16ruball
     type: runCLI
@@ -827,12 +827,12 @@ jobs:
       - IN: u16ruball_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16ruball drydock
+        - script: echo "running "
       - OUT: u16ruball_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16phpall
     type: runCLI
@@ -843,12 +843,12 @@ jobs:
       - IN: u16phpall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16phpall drydock
+        - script: echo "running "
       - OUT: u16phpall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: build_u16cppall
     type: runCLI
@@ -859,12 +859,12 @@ jobs:
       - IN: u16cppall_repo
       - IN: ship_dh_cli
       - TASK:
-        - script: ./IN/config_repo/gitRepo/buildImage.sh u16cppall drydock
+        - script: echo "running "
       - OUT: u16cppall_img
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   ###########################################
   # END Drydock image builds
@@ -889,11 +889,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh www 374168611083.dkr.ecr.us-east-1.amazonaws.com Shippable
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_api
     type: runCLI
@@ -910,11 +910,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh api 374168611083.dkr.ecr.us-east-1.amazonaws.com Shippable
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_nexec
     type: runCLI
@@ -931,11 +931,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh nexec 374168611083.dkr.ecr.us-east-1.amazonaws.com Shippable
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_micro
     type: runCLI
@@ -952,11 +952,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh micro 374168611083.dkr.ecr.us-east-1.amazonaws.com Shippable
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_img_genexec
     type: runCLI
@@ -971,12 +971,12 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImage.sh genexec 374168611083.dkr.ecr.us-east-1.amazonaws.com
-        - script: ./IN/config_repo/gitRepo/tagAndPushImage.sh genexec shipimg
+        - script: echo "running "
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_microbase
     type: runCLI
@@ -993,11 +993,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh microbase drydock Shippable
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_cexec
     type: runCLI
@@ -1014,11 +1014,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh cexec drydock Shippable
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_mktg
     type: runCLI
@@ -1035,11 +1035,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh mktg 374168611083.dkr.ecr.us-east-1.amazonaws.com Shippable
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_node
     type: runCLI
@@ -1054,11 +1054,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushRepo.sh node Shippable
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_base
     type: runCLI
@@ -1073,11 +1073,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushBaseRepo.sh
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   ### Taggin u14 images
   - name: tag_push_u14
@@ -1095,11 +1095,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14 drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u14all
     type: runCLI
@@ -1116,11 +1116,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14all drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u14nodall
     type: runCLI
@@ -1137,11 +1137,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14nodall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u14pytall
     type: runCLI
@@ -1158,11 +1158,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14pytall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u14cloall
     type: runCLI
@@ -1179,11 +1179,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14cloall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u14golall
     type: runCLI
@@ -1200,11 +1200,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14golall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u14javall
     type: runCLI
@@ -1221,11 +1221,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14javall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u14scaall
     type: runCLI
@@ -1242,11 +1242,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14scaall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u14ruball
     type: runCLI
@@ -1263,11 +1263,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14ruball drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u14phpall
     type: runCLI
@@ -1284,11 +1284,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14phpall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u14cppall
     type: runCLI
@@ -1305,11 +1305,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u14cppall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   ### Taggin u16 images
   - name: tag_push_u16
@@ -1327,11 +1327,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16 drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u16all
     type: runCLI
@@ -1348,11 +1348,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16all drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u16nodall
     type: runCLI
@@ -1369,11 +1369,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16nodall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u16pytall
     type: runCLI
@@ -1390,11 +1390,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16pytall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u16cloall
     type: runCLI
@@ -1411,11 +1411,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16cloall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u16golall
     type: runCLI
@@ -1432,11 +1432,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16golall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u16javall
     type: runCLI
@@ -1453,11 +1453,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16javall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u16scaall
     type: runCLI
@@ -1474,11 +1474,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16scaall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u16ruball
     type: runCLI
@@ -1495,11 +1495,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16ruball drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u16phpall
     type: runCLI
@@ -1516,11 +1516,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16phpall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: tag_push_u16cppall
     type: runCLI
@@ -1537,11 +1537,11 @@ jobs:
         switch: off
       - IN: rel_prod
       - TASK:
-        - script: ./IN/config_repo/gitRepo/tagAndPushImageRepo.sh u16cppall drydock dry-dock
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   ###########################################
   # END TAG & PUSH image/repos/amis
@@ -1565,11 +1565,11 @@ jobs:
       - IN: config_repo
         switch: off
       - TASK:
-        - script: ./IN/config_repo/gitRepo/lockUnlockTeams.sh pull
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   - name: unlock_team
     type: runCLI
@@ -1579,11 +1579,11 @@ jobs:
       - IN: config_repo
         switch: off
       - TASK:
-        - script: ./IN/config_repo/gitRepo/lockUnlockTeams.sh push
+        - script: echo "running "
     on_success:
-      - script: echo 'on success !!!!!'
+      - script: echo "successfully ran"
     on_failure:
-      - script: echo 'Failed job .... :('
+      - script: echo "failure while running"
 
   ##########################
   # begin LOCK UNLOCK JOBS
