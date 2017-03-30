@@ -241,7 +241,7 @@ jobs:
       - IN: bvt_params
       - IN: deploy_rc
       - TASK:
-        - script: IN/bat_repo/gitRepo/test.sh bvt_params
+        - "BVT passes"
     on_success:
       - script: echo 'succeeded'
     on_failure:
@@ -1588,4 +1588,3 @@ jobs:
   ##########################
   # begin LOCK UNLOCK JOBS
   ##########################
-
