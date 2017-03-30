@@ -225,7 +225,7 @@ resources:
     type: params
     version:
       params:
-        secure: i12Qc6wli31gqzWEYoWy09i9vmS0rbBNfvzU6X0qlChxEUvs4Cqde0BYbJZwwTAVbMZ/NOPd4E2PojVPC1WWx5Y2zW5YMY20aboIZ2O0f34AQyKe9YXZbwkGGGG7TddG7qafnKAFpwRkfCXysnTA/B1jh0QunQkojCu8zyTny3i84q/KvOTzLG5lS50fvHLdtCoVW1RGuXxZg6RBmtERHu1FhcaBmD1HadNKSV3NHQentnXwRk/xo2SVdQzLPDfKmu1/tmSGhr7beE06LSBJtJ9ttkq3hbKidmuU8rsa8RXRrvCm2KFuD/qFu1RQYl0vB88eDp69GQifkehBgXCtXA==
+        foo: 123
 
   ###############################
   # end RC resources
@@ -246,7 +246,7 @@ resources:
     version:
       params:
         #API_TOKEN API_URL
-        secure: ZvT52e1ppkhFyJxZIXUXpF3dufd+PCIh+s527y6Tdetob7YWzS93pIdnpmrz+xL219ur8mu+OkOYZNTGhsMEMQJJJzUJC1nh2LeqHJF+gNSC1KUz3xD68SOw5kT5v7TiE7JYVA/8mIqrJFHVI7GhEq/YObkaZTmyFw6O4pikDSEqZMRnDlv0l2ou0xZw+YXHMHD8kiGOvZjK5rJ1xqPmmnCetxOm5/7g+d24x2797z2d8oS9yDSwG5KWdIZOh9tpI7EKKrMOsES6rBoUfYtFVOWReDzWKGK38tqFFK6gEuJzI6wMfUfy+GTpY+GFPjTfI+tJJfbKB69Ftk5+Pb777w7bwj8yweyFn5/V/GL1sTsI3X6zgHh1bmSHF5P5fwJDO7feX8Y5qVGcC5QDjbCzs3KTMAz2igLphGh4XdGLSqAJq7ooCTQ5BpMFWE3yWybGcnNXPe69BcuSUmHcvdBW7fCboNwgWOQxChKsa0V3dwJksn9Ehm/KUDCkORUdrCsZL751Hxb9OzPsPZUu/SRUmZWQ4jBosXU7Pkf77rwbES40USTFeqqzLXO+EhoSLAn/ozNcdfJ30IXnP/pu42CkXHqHGvQILRw+NE0PQ2PnYB239BTo0/Wg03ytLXYz3P2jbEAGJVrC8bDSBGeW1JQmLWaW6RzDvA4yymkGuxS1jQM=
+        foo: 123 ZvT52e1ppkhFyJxZIXUXpF3dufd+PCIh+s527y6Tdetob7YWzS93pIdnpmrz+xL219ur8mu+OkOYZNTGhsMEMQJJJzUJC1nh2LeqHJF+gNSC1KUz3xD68SOw5kT5v7TiE7JYVA/8mIqrJFHVI7GhEq/YObkaZTmyFw6O4pikDSEqZMRnDlv0l2ou0xZw+YXHMHD8kiGOvZjK5rJ1xqPmmnCetxOm5/7g+d24x2797z2d8oS9yDSwG5KWdIZOh9tpI7EKKrMOsES6rBoUfYtFVOWReDzWKGK38tqFFK6gEuJzI6wMfUfy+GTpY+GFPjTfI+tJJfbKB69Ftk5+Pb777w7bwj8yweyFn5/V/GL1sTsI3X6zgHh1bmSHF5P5fwJDO7feX8Y5qVGcC5QDjbCzs3KTMAz2igLphGh4XdGLSqAJq7ooCTQ5BpMFWE3yWybGcnNXPe69BcuSUmHcvdBW7fCboNwgWOQxChKsa0V3dwJksn9Ehm/KUDCkORUdrCsZL751Hxb9OzPsPZUu/SRUmZWQ4jBosXU7Pkf77rwbES40USTFeqqzLXO+EhoSLAn/ozNcdfJ30IXnP/pu42CkXHqHGvQILRw+NE0PQ2PnYB239BTo0/Wg03ytLXYz3P2jbEAGJVrC8bDSBGeW1JQmLWaW6RzDvA4yymkGuxS1jQM=
 
   ###############################
   # END BVT resources
@@ -673,4 +673,4 @@ resources:
         TEAM_NAME: "pushPull"
         ORG_NAME: "shippable"
         GITHUB_API_URL: 'https://api.github.com'
-        secure: x5wKdu6PFyLZAGowQQ2bs/p8VDzBJfOoe0JVKDK51GVfNlMCuZX3jY0bxlkj+im3Vl3xSGdUK0I2R+SzmbGiazPizjGC98MhR6T4XnhKGIMAqOzwHjyd2eRmyksZOCFQ1KkrXLGJ4jMkaOEnzgjWP98ZC9VHyd/QmbP9d74w+QY3EtMw0jzCN+7t/Y0JVP/SOj7NRjNdhcuXVA7YsSYur4aILJ+bpBLgRGe/AJiUaBEi9Xw9xrmOh+M1tv5qmzTkNE65KJfdRsljCvVT0ZPfVQFzdHAlmL3ffqYmaS2qwi9go7HbDLIvwuKve2cK36arhiHgrE8VSQa5I0L7J2gs3g==
+        foo: 123
