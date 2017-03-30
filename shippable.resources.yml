@@ -302,7 +302,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14
+      sourceName: harryi3t/test-1
       branch: master
       buildOnTagPush: true
 
@@ -318,7 +318,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14all
+      sourceName: harryi3t/test-1
       branch: master
       buildOnTagPush: true
 
@@ -334,7 +334,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14nodall
+      sourceName: harryi3t/test-1
       branch: master
       buildOnTagPush: true
 
@@ -350,7 +350,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14pytall
+      sourceName: harryi3t/test-1
       branch: master
       buildOnTagPush: true
 
@@ -366,7 +366,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14cloall
+      sourceName: harryi3t/test-1
       branch: master
       buildOnTagPush: true
 
@@ -382,7 +382,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14golall
+      sourceName: harryi3t/test-1
       branch: master
       buildOnTagPush: true
 
@@ -398,7 +398,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14javall
+      sourceName: harryi3t/test-2
       branch: master
       buildOnTagPush: true
 
@@ -414,7 +414,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14scaall
+      sourceName: harryi3t/test-2
       branch: master
       buildOnTagPush: true
 
@@ -430,7 +430,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14ruball
+      sourceName: harryi3t/test-2
       branch: master
       buildOnTagPush: true
 
@@ -446,7 +446,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14phpall
+      sourceName: harryi3t/test-2
       branch: master
       buildOnTagPush: true
 
@@ -462,7 +462,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u14cppall
+      sourceName: harryi3t/test-2
       branch: master
 
   - name: u14cppall_img
@@ -477,7 +477,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16
+      sourceName: harryi3t/test-2
       branch: master
       buildOnTagPush: true
 
@@ -493,7 +493,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16all
+      sourceName: harryi3t/test-3
       branch: master
       buildOnTagPush: true
 
@@ -509,7 +509,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16nodall
+      sourceName: harryi3t/test-3
       branch: master
       buildOnTagPush: true
 
@@ -525,7 +525,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16pytall
+      sourceName: harryi3t/test-3
       branch: master
       buildOnTagPush: true
 
@@ -541,7 +541,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16cloall
+      sourceName: harryi3t/test-3
       branch: master
       buildOnTagPush: true
 
@@ -557,7 +557,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16golall
+      sourceName: harryi3t/test-3
       branch: master
       buildOnTagPush: true
 
@@ -573,7 +573,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16javall
+      sourceName: harryi3t/test-4
       branch: master
       buildOnTagPush: true
 
@@ -589,7 +589,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16scaall
+      sourceName: harryi3t/test-4
       branch: master
       buildOnTagPush: true
 
@@ -605,7 +605,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16ruball
+      sourceName: harryi3t/test-4
       branch: master
       buildOnTagPush: true
 
@@ -621,7 +621,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16phpall
+      sourceName: harryi3t/test-4
       branch: master
       buildOnTagPush: true
 
@@ -637,7 +637,7 @@ resources:
     type: gitRepo
     integration: git
     pointer:
-      sourceName: dry-dock/u16cppall
+      sourceName: harryi3t/test-4
       branch: master
 
   - name: u16cppall_img
