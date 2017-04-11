@@ -96,7 +96,7 @@ jobs:
       - script: echo "failure while running"
 
   ##########################
-  # begin Shippable Server jobs
+  # begin harryi3t Server jobs
   ##########################
   - name: build_micro
     type: runCLI

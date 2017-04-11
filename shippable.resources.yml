@@ -75,7 +75,7 @@ resources:
       branch: master
 
   ###############################
-  # begin Shippable Server resources
+  # begin harryi3t Server resources
   ###############################
   - name: shipbits_ecr_cli
     type: cliConfig
@@ -168,7 +168,7 @@ resources:
       versionName: "5.3.1"
 
   ###############################
-  # end Shippable Server resources
+  # end harryi3t Server resources
   ###############################
 
   ###############################
@@ -180,7 +180,7 @@ resources:
     type: gitRepo
     integration: "git"
     pointer:
-      sourceName: "Shippable/infra"
+      sourceName: "harryi3t/infra"
       branch: master
 
 # PEM key for AWS RC account
@@ -656,7 +656,7 @@ resources:
   # Begin SSH Key to GH
   ###############################
 
-  # CREDS for GH access for Shippable
+  # CREDS for GH access for harryi3t
   - name: avi_gh_ssh
     type: integration
     integration: ssh
@@ -671,6 +671,6 @@ resources:
       params:
         TEAM_ID: 523906
         TEAM_NAME: "pushPull"
-        ORG_NAME: "shippable"
+        ORG_NAME: "harryi3t"
         GITHUB_API_URL: 'https://api.github.com'
         foo: 123

@@ -5,7 +5,7 @@ export RES_IMAGE="base_img"
 export RES_VER="rel_prod"
 export RES_REPO="base_repo"
 export RES_GH_SSH="avi_gh_ssh"
-export SSH_PATH="git@github.com:Shippable/base.git"
+export SSH_PATH="git@github.com:harryi3t/base.git"
 
 export RES_IMAGE_UP=$(echo $RES_IMAGE | awk '{print toupper($0)}')
 export RES_IMAGE_META=$(eval echo "$"$RES_IMAGE_UP"_META")
